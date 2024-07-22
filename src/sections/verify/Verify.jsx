@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -6,11 +6,21 @@ import { Secure } from "../../assets/gif/";
 
 function Verify() {
   const [showNewText, setShowNewText] = useState(false);
-
+  const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (redirect) {
+      const timeoutId = setTimeout(() => {
+        navigate("/");
+      }, 700);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [redirect, navigate]);
 
   const handleMouseDown = () => {
     setShowNewText(true);
+    setRedirect(true);
   };
 
   const handleMouseUp = () => {
@@ -34,7 +44,6 @@ function Verify() {
           <motion.button
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            onClick={navigate("/")}
             className="w-[90%] min-h-10 text-white rounded-lg text-sm font-normal font-instrument relative overflow-hidden flex items-center justify-center"
           >
             <AnimatePresence>
